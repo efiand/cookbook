@@ -1,0 +1,11 @@
+@mixin icon($icon, $mask: true) {
+	$value: url('/images/sprite.svg##{$icon}') no-repeat center / 100%;
+
+	@if $mask {
+		mask: $value;
+	}
+
+	@else {
+		background: $value;
+	}
+}

@@ -1,0 +1,23 @@
+$color-text: #333333;
+$color-blacky: #393939;
+$color-white: #ffffff;
+$color-darkgray: #777777;
+$color-gray: #999999;
+$color-lightgray: #b4b4b4;
+$color-lightergray: #eeeeee;
+$color-red: #800000;
+$color-lightred: #caaaaa;
+$color-green: #00796b;
+$color-lightgreen: #b2dfdb;
+
+$shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+$shadow-small: 0 2px 2px rgba(0, 0, 0, 0.2);
+
+$gradient-blacky: linear-gradient($color-text, $color-blacky, $color-text);
+$gradient-line: linear-gradient(90deg, $color-lightgray, transparent);
+
+$font-sans-serif: 'Roboto', sans-serif;
+$font-accent: 'Montserrat', sans-serif;
+
+$transitions: color, opacity, background-color, border-color, box-shadow;
+$transition-default: 0.2s ease-in-out;

@@ -1,0 +1,64 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model categories {
+  id    Int    @id @default(autoincrement())
+  title String @unique @db.VarChar(500)
+
+  recipes recipesCategories[]
+}
+
+model images {
+  id        Int    @id @default(autoincrement())
+  filename  String @unique @db.VarChar(30)
+  sortOrder Int?
+  recipeId  Int?
+
+  recipe recipes? @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+}
+
+model recipes {
+  id          Int     @id @default(autoincrement())
+  title       String  @unique @db.VarChar(500)
+  ingredients String  @db.Text
+  method      String  @db.Text
+  url         String? @db.VarChar(2000)
+  structureId Int?
+
+  structure  structures?         @relation(fields: [structureId], references: [id])
+  categories recipesCategories[]
+  images     images[]
+}
+
+model recipesCategories {
+  id         Int @id @default(autoincrement())
+  recipeId   Int
+  categoryId Int
+
+  category categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  recipe   recipes    @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([recipeId, categoryId])
+  @@index([categoryId])
+  @@index([recipeId])
+}
+
+model structures {
+  id        Int    @id @default(autoincrement())
+  title     String @unique @db.VarChar(500)
+  sortOrder Int?
+  parentId  Int?
+
+  recipes  recipes[]
+  parent   structures?  @relation("structuresTostructures", fields: [parentId], references: [id])
+  children structures[] @relation("structuresTostructures")
+
+  @@index([parentId])
+}

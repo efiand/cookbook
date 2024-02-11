@@ -1,0 +1,42 @@
+@use '../variables' as *;
+@use 'media' as *;
+
+@mixin hover {
+	@media (hover: hover) {
+		&:hover {
+			@content;
+		}
+	}
+}
+
+@mixin active {
+	@media (hover: hover) {
+		&:active {
+			@content;
+		}
+	}
+}
+
+@mixin interactive {
+	@media (hover: hover) {
+		&:hover {
+			opacity: 0.6;
+		}
+
+		&:active {
+			opacity: 0.3;
+		}
+
+		@include has-motion {
+			transition: opacity $transition-default;
+		}
+	}
+}
+
+@mixin underline-link() {
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
