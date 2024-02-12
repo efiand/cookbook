@@ -108,16 +108,16 @@ provide('togglePreloader', togglePreloader);
 
 	@include media-lg {
 		padding: 1rem 0;
-	}
 
-	&::before {
-		content: '';
-		position: fixed;
-		inset: 0;
-		z-index: -1;
-		background-image: v-bind(background);
-		background-size: cover;
-		filter: blur(20px);
+		&::before {
+			content: '';
+			position: fixed;
+			inset: 0;
+			z-index: -1;
+			background-image: v-bind(background);
+			background-size: cover;
+			filter: blur(20px);
+		}
 	}
 }
 
@@ -125,6 +125,7 @@ provide('togglePreloader', togglePreloader);
 	display: grid;
 	grid-template-rows: min-content 1fr min-content;
 	max-width: 1120px;
+	min-height: 100vh;
 	margin: 0 auto;
 	background-color: $color-white;
 
