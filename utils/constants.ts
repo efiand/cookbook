@@ -9,7 +9,7 @@ export default Object.freeze({
 		POST: 'POST',
 		PUT: 'PUT',
 	},
-	IMAGE: 'table.jpg',
+	IMAGE: 'background.webp',
 	PROJECT: 'Кулинарная книга',
 	StatusCodes,
 	head: {
