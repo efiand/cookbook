@@ -47,10 +47,10 @@
 <script lang="ts" setup>
 const appStore = useAppStore();
 const route = useRoute();
+const togglePreloader = inject('togglePreloader') as flaggedMethod;
 
 // Data
 const recipeId = +route.params.id;
-const togglePreloader = inject('togglePreloader') as flaggedMethod;
 let recipe = appStore.recipes.find(({ id }) => id === recipeId) as Recipe || {};
 const urls = listify(recipe.url || '');
 

@@ -17,6 +17,15 @@
 	}
 }
 
+@mixin hover-active {
+	@media (hover: hover) {
+		&:hover,
+		&:active {
+			@content;
+		}
+	}
+}
+
 @mixin interactive {
 	@media (hover: hover) {
 		&:hover {
@@ -25,10 +34,6 @@
 
 		&:active {
 			opacity: 0.3;
-		}
-
-		@include has-motion {
-			transition: opacity $transition-default;
 		}
 	}
 }

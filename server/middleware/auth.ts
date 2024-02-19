@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 		}
 	}
 
-	if (!event.context.authorized && event.path.startsWith('/admin')) {
+	if (!event.context.authorized && event.path.includes('/admin/')) {
 		sendRedirect(event, '/auth', StatusCodes.MOVED_TEMPORARILY);
 	}
 });

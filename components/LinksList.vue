@@ -74,10 +74,6 @@ const closeds = ref(props.items.map(() => true));
 	&:not(:last-child) {
 		margin-bottom: 0.5rem;
 	}
-
-	&--editable {
-		margin-left: 28px;
-	}
 }
 
 .links-list__toggler {
@@ -92,14 +88,16 @@ const closeds = ref(props.items.map(() => true));
 }
 
 .links-list__edit-link {
+	flex-shrink: 0;
 	margin-top: -3px;
-	margin-left: 4px;
+	margin-left: 6px;
 	visibility: hidden;
 }
 
 .links-list__group {
 	display: flex;
 	align-items: flex-start;
+	width: fit-content;
 	margin: 0;
 
 	&:hover,

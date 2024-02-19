@@ -31,7 +31,7 @@
       />
     </form-item>
     <ui-button
-      :disabled="!!Object.keys(errors).length"
+      :disabled="posting || !!Object.keys(errors).length"
       class="auth__submit"
       type="submit"
     >
@@ -47,13 +47,21 @@ const data = ref<AuthData>({
 	password: '',
 });
 const schema = toTypedSchema(schemas.auth);
+const togglePreloader = inject('togglePreloader') as flaggedMethod;
+const posting = ref(false);
 
 // Methods
 async function onSubmit(body: Object) {
+	posting.value = true;
+	togglePreloader(true);
+
 	const res = await useFetch('/api/auth', {
 		body,
 		method: 'post',
 	});
+
+	posting.value = false;
+	togglePreloader(false);
 
 	if (res.error.value) {
 		toast(res.error.value.data.message, { error: true });

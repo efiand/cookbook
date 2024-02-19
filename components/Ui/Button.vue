@@ -63,6 +63,8 @@ defineEmits(['click']);
 		background-color: $color-green;
 		border: 1px solid transparent;
 		border-radius: 0.25rem;
+		outline-offset: 2px;
+		user-select: none;
 
 		&--secondary {
 			background-color: $color-blacky;
@@ -72,11 +74,15 @@ defineEmits(['click']);
 			background-color: $color-darkgray;
 		}
 
+		&:focus-visible {
+			outline: 2px solid $color-green;
+		}
+
 		&--link[href],
 		&--control:not(:disabled) {
-			&:hover,
-			&:active {
+			@include hover-active {
 				background-color: $color-darkgray;
+				opacity: 1;
 			}
 		}
 	}
