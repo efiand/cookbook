@@ -11,7 +11,10 @@
       <ui-button to="/admin/structures/add">
         Добавить раздел
       </ui-button>
-      <ui-button to="/admin/dump">
+      <ui-button
+        :disabled="dumping"
+        @click="dump"
+      >
         Резервное копирование
       </ui-button>
       <ui-button href="/logout">
@@ -22,7 +25,27 @@
 </template>
 
 <script lang="ts" setup>
+const togglePreloader = inject('togglePreloader') as flaggedMethod;
 
+// Data
+const dumping = ref(false);
+
+// Methods
+async function dump() {
+	dumping.value = true;
+	togglePreloader(true);
+
+	const res = await useFetch('/api/admin/dump', { method: 'post' });
+
+	dumping.value = false;
+	togglePreloader(false);
+
+	if (res.error.value) {
+		toast(res.error.value.data.message, { error: true });
+	} else {
+		toast('Резервное копирование завершено!');
+	}
+}
 </script>
 
 <style lang="scss" scoped>
