@@ -34,7 +34,7 @@
       :href="authorized ? route.path : ''"
       :type="authorized ? 'admin' : 'auth'"
       class="nav-list__icon-link"
-      v-if="type === 'breadcrumbs'"
+      v-if="type === 'breadcrumbs' && !(authorized && route.path === '/')"
     />
   </div>
 </template>
