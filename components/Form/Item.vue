@@ -24,18 +24,20 @@
 </template>
 
 <script lang="ts" setup>
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
+	alias?: string;
 	hideLabel?: boolean;
 	label: string;
 	name: string;
 	required?: boolean;
 }>(), {
+	alias: nanoid(),
 	hideLabel: false,
 	required: false,
 });
 
 // Data
-const id = ref(nanoid());
+const id = ref(`${props.alias}_${props.name}`);
 const modelValue = defineModel<number | string>();
 </script>
 

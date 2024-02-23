@@ -6,6 +6,7 @@
     v-slot="{ errors }"
   >
     <form-item
+      alias="auth"
       label="Логин"
       name="login"
       required
@@ -18,6 +19,7 @@
       />
     </form-item>
     <form-item
+      alias="auth"
       label="Пароль"
       name="password"
       required
