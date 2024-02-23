@@ -1,4 +1,4 @@
 import type { RouteLocationNormalized } from '#vue-router';
 
-export default (route: RouteLocationNormalized) => /^\d+$/
-	.test(route.params.id.toString());
+export default (route: RouteLocationNormalized) => !!schemas.id
+	.validateSync({ id: route.params.id.toString() });
