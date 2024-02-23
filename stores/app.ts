@@ -32,12 +32,7 @@ export const useAppStore = defineStore('appStore', () => {
 
 			breadcrumbs.value = [];
 			categories.value = rawCategories.value;
-			editLink.value = authorized.value
-				? {
-					href: '/admin/categories',
-					mode: 'edit',
-				}
-				: null;
+			editLink.value = null;
 			heading.value = category.title;
 			image.value = getRecipeImage(recipes.value
 				.find(({
@@ -47,6 +42,11 @@ export const useAppStore = defineStore('appStore', () => {
 					&& recipeCategory.categoryId === categoryId)
 					&& images.length)) || constants.IMAGE;
 			title.value = getTitle(category.title);
+		},
+		categoriesAdmin() {
+			setDefaultPageData();
+			heading.value = 'Редактирование категорий';
+			title.value = getTitle('Редактирование категорий');
 		},
 		error(statusCode) {
 			const error = `Ошибка ${statusCode}`;
@@ -164,12 +164,24 @@ export const useAppStore = defineStore('appStore', () => {
 
 		return recipes.value[i];
 	}
+	function updateCategory(category: Entity) {
+		const existedCategory = rawCategories.value
+			.find(({ id }) => id === category.id);
+
+		if (existedCategory) {
+			existedCategory.title = category.title;
+		} else {
+			rawCategories.value.push(category);
+			rawCategories.value.sort(sortByTitle);
+		}
+	}
 	function updatePage(path: string) {
+		const isAdmin = path.startsWith('/admin');
 		const error = useError();
 		const [
 			, name,
 			id = -1,
-		] = path.split('/');
+		] = path.replace(/^\/admin/, '').split('/');
 
 		if (error.value || !updateMethods[name || 'index']) {
 			const { statusCode = 404 } = error.value as AppError || {};
@@ -177,7 +189,7 @@ export const useAppStore = defineStore('appStore', () => {
 			return updateMethods.error(statusCode);
 		}
 
-		updateMethods[name || 'index'](+id);
+		updateMethods[`${name || 'index'}${isAdmin ? 'Admin' : ''}`](+id);
 	}
 	function getChildren(id: number) {
 		return structures.value.filter(({ parentId }) => parentId === id);
@@ -221,10 +233,12 @@ export const useAppStore = defineStore('appStore', () => {
 		fillRecipe,
 		heading,
 		image,
+		rawCategories,
 		recipes,
 		recipesCategories,
 		structures,
 		title,
+		updateCategory,
 		updatePage,
 	};
 });
