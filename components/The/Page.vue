@@ -123,6 +123,7 @@ provide('togglePreloader', togglePreloader);
 
 .page__body {
 	display: grid;
+	grid-template-columns: 100%;
 	grid-template-rows: min-content 1fr min-content;
 	max-width: 1120px;
 	min-height: 100vh;
@@ -140,11 +141,11 @@ provide('togglePreloader', togglePreloader);
 	padding: 2rem;
 
 	@include media-md-lg {
-		padding: 2rem 3rem 3rem;
+		padding: 3rem;
 	}
 
 	@include media-lg {
-		padding: 2rem 5rem 5rem;
+		padding: 3rem 5rem 5rem;
 	}
 }
 

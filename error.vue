@@ -1,6 +1,9 @@
 <template>
   <the-page>
-    <the-error :message="message" />
+    <the-error
+      :message="message"
+      :stack="error.stack"
+    />
   </the-page>
 </template>
 
