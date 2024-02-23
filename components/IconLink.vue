@@ -20,7 +20,7 @@ const ariaLabels = {
 };
 
 // Computed
-const mask = computed(() => `url("/images/sprite.svg#${props.mode}"`);
+const mask = computed(() => `url("/images/sprite.min.svg#${props.mode}"`);
 </script>
 
 <style lang="scss" scoped>
