@@ -5,10 +5,10 @@
     </sub-heading>
 
     <div class="control-panel__list">
-      <ui-button to="/admin/recipes/add">
+      <ui-button to="/admin/recipes/0">
         Добавить рецепт
       </ui-button>
-      <ui-button to="/admin/structures/add">
+      <ui-button to="/admin/structures/0">
         Добавить раздел
       </ui-button>
       <ui-button

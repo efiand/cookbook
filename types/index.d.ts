@@ -61,6 +61,11 @@ declare global {
 		title: string;
 	}
 
+	interface IconLink {
+		href: string;
+		mode: 'auth' | 'back' | 'edit';
+	}
+
 	interface ExtendedLink extends Link {
 		additionals?: ExtendedLink[];
 		children?: ExtendedLink[];

@@ -9,15 +9,16 @@ export const useAppStore = defineStore('appStore', () => {
 	// Мзменяемые по типам страниц
 	const breadcrumbs: Ref<Entity[] | null> = ref(null);
 	const categories: Ref<Entity[] | null> = ref(null);
+	const editLink: Ref<IconLink | null> = ref(null);
 	const heading: Ref<string> = ref(constants.PROJECT);
 	const image: Ref<string> = ref(constants.IMAGE);
 	const title: Ref<string> = ref(constants.PROJECT);
 
 	const updateMethods: { [method: string]: (id: number) => void } = {
 		auth() {
+			setDefaultPageData();
 			heading.value = 'Вход для администрирования';
 			title.value = getTitle('Вход');
-			setDefaultPageData();
 		},
 		categories(categoryId: number) {
 			const category = rawCategories.value
@@ -31,6 +32,12 @@ export const useAppStore = defineStore('appStore', () => {
 
 			breadcrumbs.value = [];
 			categories.value = rawCategories.value;
+			editLink.value = authorized.value
+				? {
+					href: '/admin/categories',
+					mode: 'edit',
+				}
+				: null;
 			heading.value = category.title;
 			image.value = getRecipeImage(recipes.value
 				.find(({
@@ -44,15 +51,14 @@ export const useAppStore = defineStore('appStore', () => {
 		error(statusCode) {
 			const error = `Ошибка ${statusCode}`;
 
+			setDefaultPageData();
 			heading.value = error;
 			title.value = getTitle(error);
-			setDefaultPageData();
 		},
 		index() {
-			breadcrumbs.value = [];
+			setDefaultPageData();
 			categories.value = rawCategories.value;
 			heading.value = constants.PROJECT;
-			image.value = constants.IMAGE;
 			title.value = constants.PROJECT;
 		},
 		recipes(recipeId: number) {
@@ -83,7 +89,12 @@ export const useAppStore = defineStore('appStore', () => {
 			categories.value = actualCategories.length
 				? actualCategories
 				: null;
-
+			editLink.value = authorized.value
+				? {
+					href: `/admin/recipes/${recipeId}`,
+					mode: 'edit',
+				}
+				: null;
 			heading.value = recipe.title;
 			image.value = getRecipeImage(recipe) || constants.IMAGE;
 			title.value = getTitle(recipe.title);
@@ -117,6 +128,12 @@ export const useAppStore = defineStore('appStore', () => {
 			breadcrumbs.value.push(structure);
 
 			categories.value = null;
+			editLink.value = authorized.value
+				? {
+					href: `/admin/structures/${structureId}`,
+					mode: 'edit',
+				}
+				: null;
 			heading.value = structure.title;
 			image.value = tempImage || constants.IMAGE;
 			title.value = getTitle(structure.title);
@@ -191,6 +208,7 @@ export const useAppStore = defineStore('appStore', () => {
 	function setDefaultPageData() {
 		breadcrumbs.value = [];
 		categories.value = null;
+		editLink.value = null;
 		image.value = constants.IMAGE;
 	}
 
@@ -198,6 +216,7 @@ export const useAppStore = defineStore('appStore', () => {
 		authorized,
 		breadcrumbs,
 		categories,
+		editLink,
 		fetch,
 		fillRecipe,
 		heading,

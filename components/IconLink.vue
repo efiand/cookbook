@@ -1,20 +1,26 @@
 <template>
   <nuxt-link
-    :aria-label="type === 'auth' ? 'Авторизоваться' : 'Редактировать'"
-    :class="{ 'icon-link--auth': type === 'auth' }"
-    :to="`/${type}${href}`"
-    class="icon-link"
+    :aria-label="ariaLabels[mode]"
+    :class="`icon-link icon-link--${mode}`"
+    :to="href"
   />
 </template>
 
 <script lang="ts" setup>
-withDefaults(defineProps<{
-	href?: string;
-	type: 'admin' | 'auth';
-}>(), {
-	href: '',
-	type: 'admin',
-});
+const props = defineProps<{
+	href: IconLink['href'];
+	mode: IconLink['mode'];
+}>();
+
+// Data
+const ariaLabels = {
+	auth: 'Авторизоваться',
+	back: 'Назад к просмотру',
+	edit: 'Редактировать',
+};
+
+// Computed
+const mask = computed(() => `url("/images/sprite.svg#${props.mode}"`);
 </script>
 
 <style lang="scss" scoped>
@@ -29,16 +35,12 @@ withDefaults(defineProps<{
 		width: 100%;
 		height: 100%;
 		background-color: currentColor;
-		mask-image: url('/images/sprite.svg#edit');
+		mask-image: v-bind(mask);
 	}
 
 	&--auth {
 		&:not(:hover, :focus-visible) {
 			opacity: 0;
-		}
-
-		&::before {
-			mask-image: url('/images/sprite.svg#sign-in');
 		}
 	}
 }

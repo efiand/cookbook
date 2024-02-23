@@ -19,9 +19,9 @@
           {{ title }}
         </nuxt-link>
         <icon-link
-          :href="href"
+          :href="`/admin${href}`"
           class="links-list__edit-link"
-          type="admin"
+          mode="edit"
           v-if="editable"
         />
       </p>

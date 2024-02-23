@@ -1,8 +1,8 @@
 <template>
   <div class="nav-list">
     <icon-link
-      :href="authorized ? '/categories' : ''"
-      :type="authorized ? 'admin' : 'auth'"
+      :href="authorized ? '/admin/categories' : '/auth'"
+      :mode="authorized ? 'edit' : 'auth'"
       class="nav-list__icon-link"
       v-if="type === 'categories'"
     />
@@ -31,10 +31,9 @@
     </ul>
 
     <icon-link
-      :href="authorized ? route.path : ''"
-      :type="authorized ? 'admin' : 'auth'"
+      v-if="type !== 'categories' && editLink"
+      v-bind="editLink"
       class="nav-list__icon-link"
-      v-if="type === 'breadcrumbs' && !(authorized && route.path === '/')"
     />
   </div>
 </template>
@@ -49,7 +48,9 @@ const props = withDefaults(defineProps<{
 });
 const error = useError();
 const route = useRoute();
-const { authorized } = useAppStore();
+const {
+	authorized, editLink = null,
+} = toRefs(useAppStore());
 
 // Computed
 const links = computed((): Link[] => {
