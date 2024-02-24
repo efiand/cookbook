@@ -3,10 +3,9 @@
     :class="{ 'input--invalid': invalid }"
     :id="id"
     :inputmode="inputmode"
-    :invalid="invalid"
     :is="rows > 1 ? 'textarea' : 'input'"
     :rows="rows > 1 ? rows : null"
-    :spellcheck="spellcheck"
+    :spellcheck="rows > 1 ? spellcheck : null"
     :type="rows > 1 ? null : type"
     @input="onInput"
     class="input"
@@ -18,7 +17,7 @@
 const props = withDefaults(defineProps<{
 	field?: FieldBindingObject<any> | null;
 	id?: null | string;
-	inputmode?: string;
+	inputmode?: null | string;
 	invalid?: boolean;
 	rows?: number;
 	spellcheck?: boolean;
@@ -26,7 +25,7 @@ const props = withDefaults(defineProps<{
 }>(), {
 	field: null,
 	id: null,
-	inputmode: 'text',
+	inputmode: null,
 	invalid: false,
 	rows: 1,
 	spellcheck: false,
@@ -52,7 +51,7 @@ function onInput() {
 	outline: none;
 
 	&:focus {
-		border-color: $color-gray;
+		border-color: $color-green;
 	}
 
 	&--invalid {

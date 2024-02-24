@@ -11,11 +11,12 @@
       name="login"
       required
       v-model="data.login"
-      v-slot="{ id, field }"
+      v-slot="{ id, field, invalid }"
     >
       <form-input
         :field="field"
         :id="id"
+        :invalid="invalid"
       />
     </form-item>
     <form-item
@@ -24,11 +25,12 @@
       name="password"
       required
       v-model="data.password"
-      v-slot="{ id, field }"
+      v-slot="{ id, field, invalid }"
     >
       <form-input
         :field="field"
         :id="id"
+        :invalid="invalid"
         type="password"
       />
     </form-item>

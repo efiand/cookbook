@@ -5,7 +5,7 @@
     as="div"
     class="form-item"
     v-model="modelValue"
-    v-slot="{ field }"
+    v-slot="{ field, errors }"
   >
     <label
       :class="{ 'visually-hidden': hideLabel }"
@@ -15,6 +15,7 @@
     <slot
       :field="field"
       :id="id"
+      :invalid="!!errors.length"
     />
     <v-error-message
       :name="name"
