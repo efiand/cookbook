@@ -34,11 +34,13 @@ withDefaults(defineProps<{
 
 .error__stack {
 	margin-top: 2rem;
+	padding: 1.25rem;
 	overflow: auto;
 	background-color: $color-lightergray;
+	border-radius: 0.125rem;
 
 	:deep(pre) {
-		margin: 1.5rem;
+		margin: 0;
 	}
 }
 </style>
