@@ -27,11 +27,10 @@
       v-model="data.password"
       v-slot="{ id, field, invalid }"
     >
-      <form-input
+      <form-password-input
         :field="field"
         :id="id"
         :invalid="invalid"
-        type="password"
       />
     </form-item>
     <ui-button

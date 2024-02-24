@@ -43,7 +43,7 @@ function onInput() {
 <style lang="scss" scoped>
 .input {
 	box-sizing: border-box;
-	padding: 0.5rem;
+	padding: 0.5rem var(--right-space, 0.5rem) 0.5rem 0.5rem;
 	overflow-y: auto;
 	background-color: transparent;
 	border: 1px solid $color-lightgray;
