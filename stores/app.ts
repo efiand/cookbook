@@ -44,22 +44,11 @@ export const useAppStore = defineStore('appStore', () => {
 			title.value = getTitle(category.title);
 		},
 		categoriesAdmin() {
-			setDefaultPageData();
-			heading.value = 'Редактирование категорий';
-			title.value = getTitle('Редактирование категорий');
-		},
-		error(statusCode) {
-			const error = `Ошибка ${statusCode}`;
-
-			setDefaultPageData();
-			heading.value = error;
-			title.value = getTitle(error);
+			setDefaultPageData('Редактирование категорий');
 		},
 		index() {
-			setDefaultPageData();
+			setDefaultPageData(constants.PROJECT);
 			categories.value = rawCategories.value;
-			heading.value = constants.PROJECT;
-			title.value = constants.PROJECT;
 		},
 		recipes(recipeId: number) {
 			const recipe = getRecipe(recipeId);
@@ -95,9 +84,8 @@ export const useAppStore = defineStore('appStore', () => {
 					mode: 'edit',
 				}
 				: null;
-			heading.value = recipe.title;
 			image.value = getRecipeImage(recipe) || constants.IMAGE;
-			title.value = getTitle(recipe.title);
+			setHeadings(recipe.title);
 		},
 		structures(structureId: number) {
 			const structure = getStructure(structureId);
@@ -134,9 +122,8 @@ export const useAppStore = defineStore('appStore', () => {
 					mode: 'edit',
 				}
 				: null;
-			heading.value = structure.title;
 			image.value = tempImage || constants.IMAGE;
-			title.value = getTitle(structure.title);
+			setHeadings(structure.title);
 		},
 	};
 
@@ -186,7 +173,7 @@ export const useAppStore = defineStore('appStore', () => {
 		if (error.value || !updateMethods[name || 'index']) {
 			const { statusCode = 404 } = error.value as AppError || {};
 
-			return updateMethods.error(statusCode);
+			return setDefaultPageData(`Ошибка ${statusCode}`);
 		}
 
 		updateMethods[`${name || 'index'}${isAdmin ? 'Admin' : ''}`](+id);
@@ -217,11 +204,18 @@ export const useAppStore = defineStore('appStore', () => {
 
 		return `recipes/${recipe.images[0].filename}`;
 	}
-	function setDefaultPageData() {
+	function setDefaultPageData(heading?: string) {
 		breadcrumbs.value = [];
 		categories.value = null;
 		editLink.value = null;
 		image.value = constants.IMAGE;
+		if (heading) {
+			setHeadings(heading);
+		}
+	}
+	function setHeadings(text: string) {
+		heading.value = text;
+		title.value = getTitle(text);
 	}
 
 	return {
