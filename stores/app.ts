@@ -17,7 +17,7 @@ export const useAppStore = defineStore('appStore', () => {
 	const updateMethods: { [method: string]: (id: number) => void } = {
 		auth() {
 			setDefaultPageData();
-			heading.value = 'Вход для администрирования';
+			heading.value = 'Вход для администри&shy;рования';
 			title.value = getTitle('Вход');
 		},
 		categories(categoryId: number) {

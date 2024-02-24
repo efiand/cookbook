@@ -60,6 +60,7 @@ defineEmits(['click']);
 		text-align: center;
 		color: $color-white;
 		text-decoration: none;
+		overflow-wrap: anywhere;
 		background-color: $color-green;
 		border: 1px solid transparent;
 		border-radius: 0.25rem;

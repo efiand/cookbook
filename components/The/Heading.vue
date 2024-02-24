@@ -11,7 +11,7 @@
     >
       <use href="/images/logo.svg#logo" />
     </svg>
-    {{ title }}
+    <span v-html="title" />
   </h1>
 </template>
 
@@ -33,6 +33,8 @@ const route = useRoute();
 	text-align: center;
 	color: $color-green;
 	letter-spacing: -1px;
+	overflow-wrap: anywhere;
+	hyphens: auto;
 
 	@include media-md-lg {
 		padding: 2rem 3rem;

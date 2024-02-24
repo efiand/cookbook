@@ -4,14 +4,20 @@
       <sub-heading class="recipe__title">
         Состав
       </sub-heading>
-      <div v-html="paragraphy(recipe.ingredients)" />
+      <div
+        class="recipe__content"
+        v-html="paragraphy(recipe.ingredients)"
+      />
     </template>
 
     <template v-if="recipe.method">
       <sub-heading class="recipe__title">
         Приготовление
       </sub-heading>
-      <div v-html="paragraphy(recipe.method)" />
+      <div
+        class="recipe__content"
+        v-html="paragraphy(recipe.method)"
+      />
     </template>
 
     <template v-if="recipe.images.length">
@@ -70,6 +76,10 @@ definePageMeta({ validate: validateIdRoute });
 	&:first-child {
 		margin-top: 0.5rem;
 	}
+}
+
+.recipe__content {
+	hyphens: auto;
 }
 
 .recipe__gallery {
