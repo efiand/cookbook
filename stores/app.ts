@@ -30,10 +30,8 @@ export const useAppStore = defineStore('appStore', () => {
 				);
 			}
 
-			breadcrumbs.value = [];
+			setDefaultPageData(category.title);
 			categories.value = rawCategories.value;
-			editLink.value = null;
-			heading.value = category.title;
 			image.value = getRecipeImage(recipes.value
 				.find(({
 					id, images,
@@ -41,7 +39,6 @@ export const useAppStore = defineStore('appStore', () => {
 					.find((recipeCategory) => recipeCategory.recipeId === id
 					&& recipeCategory.categoryId === categoryId)
 					&& images.length)) || constants.IMAGE;
-			title.value = getTitle(category.title);
 		},
 		categoriesAdmin() {
 			setDefaultPageData('Редактирование категорий');
@@ -54,11 +51,10 @@ export const useAppStore = defineStore('appStore', () => {
 			const recipe = getRecipe(recipeId);
 
 			if (!recipe?.structureId) {
-				throw createNotFoundError(
-					`Рецепт с номером ${recipeId} не найден.`,
-				);
+				return;
 			}
 
+			setDefaultPageData(recipe.title);
 			const structure = getStructure(recipe.structureId) as Structure;
 
 			if (structure.parentId === null) {
@@ -85,19 +81,25 @@ export const useAppStore = defineStore('appStore', () => {
 				}
 				: null;
 			image.value = getRecipeImage(recipe) || constants.IMAGE;
-			setHeadings(recipe.title);
+		},
+		recipesAdmin(recipeId: number) {
+			if (recipeId) {
+				getRecipe(recipeId); // Проверка наличия
+			}
+
+			setDefaultPageData(getAdminHeading('рецепта', recipeId));
+			editLink.value = recipeId
+				? {
+					href: `/recipes/${recipeId}`,
+					mode: 'back',
+				}
+				: null;
 		},
 		structures(structureId: number) {
 			const structure = getStructure(structureId);
-
-			if (!structure) {
-				throw createNotFoundError(
-					`Раздел с номером ${structureId} не найден.`,
-				);
-			}
-
 			let tempImage = getStuctureImage(structure);
 
+			setDefaultPageData(structure.title);
 			if (structure.parentId === null) {
 				const children = getChildren(structure.id);
 
@@ -115,7 +117,6 @@ export const useAppStore = defineStore('appStore', () => {
 			}
 			breadcrumbs.value.push(structure);
 
-			categories.value = null;
 			editLink.value = authorized.value
 				? {
 					href: `/admin/structures/${structureId}`,
@@ -123,7 +124,19 @@ export const useAppStore = defineStore('appStore', () => {
 				}
 				: null;
 			image.value = tempImage || constants.IMAGE;
-			setHeadings(structure.title);
+		},
+		structuresAdmin(structureId: number) {
+			if (structureId) {
+				getStructure(structureId); // Проверка наличия
+			}
+
+			setDefaultPageData(getAdminHeading('раздела', structureId));
+			editLink.value = structureId
+				? {
+					href: `/structures/${structureId}`,
+					mode: 'back',
+				}
+				: null;
 		},
 	};
 
@@ -132,8 +145,8 @@ export const useAppStore = defineStore('appStore', () => {
 		const fetchData = () => {
 			return $fetch('/api', { headers: useRequestHeaders(['cookie']) });
 		};
-		const data: AppData = (await useAsyncData('app', fetchData))
-			.data.value || {} as AppData;
+		const data = (await useAsyncData('app', fetchData))
+			.data.value as AppData;
 
 		authorized.value = data.authorized;
 		rawCategories.value = data.categories;
@@ -150,6 +163,64 @@ export const useAppStore = defineStore('appStore', () => {
 		Object.assign(recipes.value[i], data);
 
 		return recipes.value[i];
+	}
+	function getAdminHeading(text: string, id: number) {
+		return `${id ? 'Редактирование' : 'Добавление'} ${text}`;
+	}
+	function getChildren(id: number) {
+		return structures.value.filter(({ parentId }) => parentId === id);
+	}
+	function getParent(parentId: number) {
+		return structures.value.find(({ id }) => parentId === id) as Structure;
+	}
+	function getRecipe(recipeId: number) {
+		const recipe = recipes.value.find(({ id }) => recipeId === id);
+
+		if (!recipe?.structureId) {
+			throw createNotFoundError(
+				`Рецепт с номером ${recipeId} не найден.`,
+			);
+		}
+
+		return recipe;
+	}
+	function getRecipeImage(recipe?: Recipe) {
+		if (!recipe?.images.length) {
+			return null;
+		}
+
+		return `recipes/${recipe.images[0].filename}`;
+	}
+	function getRecipes(id: number) {
+		return recipes.value.filter(({ structureId }) => structureId === id);
+	}
+	function getStructure(structureId: number) {
+		const structure = structures.value.find(({ id }) => id === structureId);
+
+		if (!structure) {
+			throw createNotFoundError(
+				`Раздел с номером ${structureId} не найден.`,
+			);
+		}
+
+		return structure;
+	}
+	function getStuctureImage({ id }: Structure) {
+		return getRecipeImage(getRecipes(id)
+			.find(({ images }) => images.length));
+	}
+	function setDefaultPageData(heading?: string) {
+		breadcrumbs.value = [];
+		categories.value = null;
+		editLink.value = null;
+		image.value = constants.IMAGE;
+		if (heading) {
+			setHeadings(heading);
+		}
+	}
+	function setHeadings(text: string) {
+		heading.value = text;
+		title.value = getTitle(text);
 	}
 	function updateCategory(category: Entity) {
 		const existedCategory = rawCategories.value
@@ -178,44 +249,8 @@ export const useAppStore = defineStore('appStore', () => {
 
 		updateMethods[`${name || 'index'}${isAdmin ? 'Admin' : ''}`](+id);
 	}
-	function getChildren(id: number) {
-		return structures.value.filter(({ parentId }) => parentId === id);
-	}
-	function getParent(parentId: number) {
-		return structures.value.find(({ id }) => parentId === id) as Structure;
-	}
-	function getRecipe(recipeId: number) {
-		return recipes.value.find(({ id }) => recipeId === id);
-	}
-	function getRecipes(id: number) {
-		return recipes.value.filter(({ structureId }) => structureId === id);
-	}
-	function getStructure(structureId: number) {
-		return structures.value.find(({ id }) => id === structureId);
-	}
-	function getStuctureImage({ id }: Structure) {
-		return getRecipeImage(getRecipes(id)
-			.find(({ images }) => images.length));
-	}
-	function getRecipeImage(recipe?: Recipe) {
-		if (!recipe?.images.length) {
-			return null;
-		}
-
-		return `recipes/${recipe.images[0].filename}`;
-	}
-	function setDefaultPageData(heading?: string) {
-		breadcrumbs.value = [];
-		categories.value = null;
-		editLink.value = null;
-		image.value = constants.IMAGE;
-		if (heading) {
-			setHeadings(heading);
-		}
-	}
-	function setHeadings(text: string) {
-		heading.value = text;
-		title.value = getTitle(text);
+	function updateStructures(newStructures: Structure[]) {
+		structures.value = newStructures;
 	}
 
 	return {
@@ -234,5 +269,6 @@ export const useAppStore = defineStore('appStore', () => {
 		title,
 		updateCategory,
 		updatePage,
+		updateStructures,
 	};
 });

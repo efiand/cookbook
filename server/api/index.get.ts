@@ -35,17 +35,7 @@ export default defineEventHandler(async (event): Promise<AppData> => {
 				recipeId: true,
 			},
 		}),
-		prisma.structures.findMany({
-			orderBy: [
-				{ sortOrder: 'asc' },
-				{ title: 'asc' },
-			],
-			select: {
-				id: true,
-				parentId: true,
-				title: true,
-			},
-		}),
+		getStructures(),
 	]);
 
 	return {
