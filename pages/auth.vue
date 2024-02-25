@@ -44,13 +44,14 @@
 </template>
 
 <script lang="ts" setup>
+const schema = toTypedSchema(schemas.auth);
+const togglePreloader = inject('togglePreloader') as flaggedMethod;
+
 // Data
 const data = ref<AuthData>({
 	login: '',
 	password: '',
 });
-const schema = toTypedSchema(schemas.auth);
-const togglePreloader = inject('togglePreloader') as flaggedMethod;
 const posting = ref(false);
 
 // Methods
@@ -69,8 +70,8 @@ async function onSubmit(body: Object) {
 	if (res.error.value) {
 		toast(res.error.value.data.message, { error: true });
 	} else {
-		toast('Успешный вход!');
 		navigateTo('/', { external: true });
+		toast('Успешный вход!');
 	}
 }
 </script>

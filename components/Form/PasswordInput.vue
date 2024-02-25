@@ -1,6 +1,7 @@
 <template>
   <div class="password-input">
     <form-input
+      :aria-hidden="show || null"
       :field="field"
       :id="id"
       :invalid="invalid"

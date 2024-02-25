@@ -15,11 +15,12 @@
         name="title"
         required
         v-model="model.title"
-        v-slot="{ id, field }"
+        v-slot="{ id, field, invalid }"
       >
         <form-input
           :field="field"
           :id="id"
+          :invalid="invalid"
         />
       </form-item>
       <ui-button
