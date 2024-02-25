@@ -6,7 +6,10 @@ export default defineNuxtConfig({
 	devtools: { enabled: false },
 	modules: [
 		'@cssninja/nuxt-toaster',
-		'@nuxtjs/html-validator',
+		[
+			'@nuxtjs/html-validator',
+			{ options: { rules: { 'prefer-native-element': 'off' } } },
+		],
 		'@pinia/nuxt',
 		[
 			'@vee-validate/nuxt',

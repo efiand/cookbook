@@ -1,13 +1,16 @@
 @use '../env' as *;
 
 html {
+	--line-height: calc(19 / 16);
+
 	margin-right: var(--right-offset, 0);
 	font-size: 16px;
-	line-height: 1.1875;
+	line-height: var(--line-height);
 
 	@include media-md-lg {
+		--line-height: calc(22 / 18);
+
 		font-size: 18px;
-		line-height: calc(22 / 18);
 	}
 }
 

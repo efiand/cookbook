@@ -21,11 +21,11 @@
 <script lang="ts" setup>
 withDefaults(defineProps<{
 	field?: FieldBindingObject<any> | null;
-	id?: null | string;
+	id?: HTMLAttributes['id'];
 	invalid?: boolean;
 }>(), {
 	field: null,
-	id: null,
+	id: undefined,
 	invalid: false,
 });
 

@@ -39,7 +39,7 @@ const props = withDefaults(defineProps<{
 
 // Data
 const id = ref(`${props.alias}_${props.name}`);
-const modelValue = defineModel<number | string>();
+const modelValue = defineModel<null | number | string>();
 </script>
 
 <style lang="scss" scoped>

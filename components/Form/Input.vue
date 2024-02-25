@@ -7,37 +7,31 @@
     :rows="rows > 1 ? rows : null"
     :spellcheck="rows > 1 ? spellcheck : null"
     :type="rows > 1 ? null : type"
-    @input="onInput"
     class="input"
     v-bind="field"
   />
 </template>
 
 <script lang="ts" setup>
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
 	field?: FieldBindingObject<any> | null;
-	id?: null | string;
-	inputmode?: null | string;
+	id?: HTMLAttributes['id'];
+	inputmode?: HTMLAttributes['inputmode'];
 	invalid?: boolean;
+	placeholder?: HTMLAttributes['placeholder'];
 	rows?: number;
 	spellcheck?: boolean;
-	type?: string;
+	type?: HTMLAttributes['type'];
 }>(), {
 	field: null,
-	id: null,
-	inputmode: null,
+	id: undefined,
+	inputmode: undefined,
 	invalid: false,
+	placeholder: undefined,
 	rows: 1,
 	spellcheck: false,
 	type: 'text',
 });
-
-// Methods
-function onInput() {
-	if (props.rows < 2) {
-		return;
-	}
-}
 </script>
 
 <style lang="scss" scoped>

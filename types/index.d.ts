@@ -1,3 +1,7 @@
+import type {
+	HTMLAttributes as Attributes, InputTypeHTMLAttribute,
+} from 'vue';
+
 import { PrismaClient } from '@prisma/client/edge';
 
 declare module globalThis {
@@ -10,6 +14,10 @@ declare global {
 	type pageName = 'categories' | 'index' | 'structures';
 	type flaggedMethod = (load: boolean) => void;
 	type StatusCode = typeof StatusCodes[keyof typeof StatusCodes];
+
+	interface HTMLAttributes extends Attributes {
+		type: InputTypeHTMLAttribute;
+	}
 
 	interface Entity {
 		id: number;
@@ -69,6 +77,11 @@ declare global {
 	interface ExtendedLink extends Link {
 		additionals?: ExtendedLink[];
 		children?: ExtendedLink[];
+	}
+
+	interface Option {
+		label: string;
+		value: number | string;
 	}
 
 	interface AppError {
