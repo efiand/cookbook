@@ -3,12 +3,13 @@
     :class="{ 'input--invalid': invalid }"
     :id="id"
     :inputmode="inputmode"
-    :is="rows > 1 ? 'textarea' : 'input'"
-    :rows="rows > 1 ? rows : null"
-    :spellcheck="rows > 1 ? spellcheck : null"
-    :type="rows > 1 ? null : type"
+    :is="rows ? 'textarea' : 'input'"
+    :rows="rows || null"
+    :spellcheck="rows ? spellcheck : null"
+    :type="rows ? null : type"
     class="input"
     v-bind="field"
+    @focus="emit('focus')"
   />
 </template>
 
@@ -28,10 +29,11 @@ withDefaults(defineProps<{
 	inputmode: undefined,
 	invalid: false,
 	placeholder: undefined,
-	rows: 1,
+	rows: 0,
 	spellcheck: false,
 	type: 'text',
 });
+const emit = defineEmits(['focus']);
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 import {
-	number, object, string,
+	array, number, object, string,
 } from 'yup';
 
 const id = object({
@@ -16,6 +16,16 @@ const parentId = object({
 		.nullable()
 		.integer('ID родительской записи должен быть целочисленным'),
 });
+const recipeContent = object({
+	ingredients: string()
+		.required('Состав обязателен для заполнения'),
+	method: string()
+		.required('Приготовление обязательно для заполнения'),
+	structureId: number()
+		.required('Раздел должен быть указан')
+		.integer('ID раздела должно быть целочисленным'),
+	url: string().default(''),
+}).concat(title);
 const entity = id.concat(title);
 
 export default {
@@ -25,6 +35,18 @@ export default {
 	}),
 	entity,
 	id,
+	recipe: object({
+		recipe: recipeContent.concat(id)
+			.concat(object({
+				images: array()
+					.of(string().required())
+					.required(),
+			})),
+		recipeCategories: array()
+			.of(number().required('Только числовые значения'))
+			.required(),
+	}),
+	recipeContent,
 	structure: entity.concat(parentId),
 	title,
 };

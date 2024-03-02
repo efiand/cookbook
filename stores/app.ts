@@ -189,7 +189,7 @@ export const useAppStore = defineStore('appStore', () => {
 			return null;
 		}
 
-		return `recipes/${recipe.images[0].filename}`;
+		return `recipes/${recipe.images[0]}`;
 	}
 	function getRecipes(id: number) {
 		return recipes.value.filter(({ structureId }) => structureId === id);
@@ -249,6 +249,12 @@ export const useAppStore = defineStore('appStore', () => {
 
 		updateMethods[`${name || 'index'}${isAdmin ? 'Admin' : ''}`](+id);
 	}
+	function updateRecipes(
+		newRecipes: Recipe[], newRecipesCategories: RecipeCategory[],
+	) {
+		recipes.value = newRecipes;
+		recipesCategories.value = newRecipesCategories;
+	}
 	function updateStructures(newStructures: Structure[]) {
 		structures.value = newStructures;
 	}
@@ -269,6 +275,7 @@ export const useAppStore = defineStore('appStore', () => {
 		title,
 		updateCategory,
 		updatePage,
+		updateRecipes,
 		updateStructures,
 	};
 });

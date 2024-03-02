@@ -14,34 +14,15 @@ export default defineEventHandler(async (event): Promise<AppData> => {
 				title: true,
 			},
 		}),
-		prisma.recipes.findMany({
-			orderBy: { title: 'asc' },
-			select: {
-				id: true,
-				images: {
-					orderBy: { sortOrder: 'asc' },
-					select: {
-						filename: true,
-						sortOrder: true,
-					},
-				},
-				structureId: true,
-				title: true,
-			},
-		}),
-		prisma.recipesCategories.findMany({
-			select: {
-				categoryId: true,
-				recipeId: true,
-			},
-		}),
+		getRecipes(),
+		getRecipesCategories(),
 		getStructures(),
 	]);
 
 	return {
 		authorized,
 		categories,
-		recipes,
+		recipes: mapRecipes(recipes),
 		recipesCategories,
 		structures,
 	};

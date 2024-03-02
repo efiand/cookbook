@@ -18,7 +18,6 @@ model categories {
 model images {
   id        Int    @id @default(autoincrement())
   filename  String @unique @db.VarChar(30)
-  sortOrder Int?
   recipeId  Int?
 
   recipe recipes? @relation(fields: [recipeId], references: [id], onDelete: Cascade)
@@ -30,7 +29,7 @@ model recipes {
   ingredients String  @db.Text
   method      String  @db.Text
   url         String? @db.VarChar(2000)
-  structureId Int?
+  structureId Int
 
   structure  structures?         @relation(fields: [structureId], references: [id])
   categories recipesCategories[]

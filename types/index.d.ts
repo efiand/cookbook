@@ -8,12 +8,14 @@ declare module globalThis {
 	let prisma: PrismaClient | null;
 }
 declare module 'bcrypt-ts';
+declare module 'blob-compare';
 
 declare global {
 	type navType = 'breadcrumbs' | 'categories';
 	type pageName = 'categories' | 'index' | 'structures';
 	type flaggedMethod = (load: boolean) => void;
 	type StatusCode = typeof StatusCodes[keyof typeof StatusCodes];
+	type Image = File | string;
 
 	interface HTMLAttributes extends Attributes {
 		type: InputTypeHTMLAttribute;
@@ -33,11 +35,6 @@ declare global {
 	interface Recipe extends Entity, RecipeContent {
 		images: Image[];
 		structureId: null | number;
-	}
-
-	interface Image {
-		filename: string;
-		sortOrder: null | number;
 	}
 
 	interface RecipeCategory {

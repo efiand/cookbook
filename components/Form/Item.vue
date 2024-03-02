@@ -13,6 +13,7 @@
       class="form-item__label"
     >{{ label }} <required-sign v-if="required" /></label>
     <slot
+      :errors="errors"
       :field="field"
       :id="id"
       :invalid="!!errors.length"
@@ -20,6 +21,7 @@
     <v-error-message
       :name="name"
       class="form-item__error"
+      v-if="!hideErrors"
     />
   </v-field>
 </template>
@@ -27,19 +29,21 @@
 <script lang="ts" setup>
 const props = withDefaults(defineProps<{
 	alias?: string;
+	hideErrors?: boolean;
 	hideLabel?: boolean;
 	label: string;
 	name: string;
 	required?: boolean;
 }>(), {
 	alias: nanoid(),
+	hideErrors: false,
 	hideLabel: false,
 	required: false,
 });
 
 // Data
 const id = ref(`${props.alias}_${props.name}`);
-const modelValue = defineModel<null | number | string>();
+const modelValue = defineModel<null | number | number[] | string | string[]>();
 </script>
 
 <style lang="scss" scoped>

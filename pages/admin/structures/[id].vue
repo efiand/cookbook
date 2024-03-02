@@ -6,7 +6,7 @@
     v-slot="{ errors }"
   >
     <form-item
-      alias="structure_title"
+      alias="structure"
       label="Название"
       name="title"
       required
@@ -20,7 +20,7 @@
       />
     </form-item>
     <form-item
-      alias="structure_parent"
+      alias="structure"
       label="Родительский раздел"
       name="parentId"
       v-model="structure.parentId"

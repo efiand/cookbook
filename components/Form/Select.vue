@@ -2,7 +2,7 @@
   <multi-select
     :class="{ 'select--invalid': invalid }"
     :id="id"
-    :mode="multi ? 'multiple' : 'single'"
+    :mode="multi ? 'tags' : 'single'"
     :options="options"
     :placeholder="placeholder"
     class="select"
@@ -36,9 +36,14 @@ withDefaults(defineProps<{
 .select {
 	--ms-px: 0.5rem;
 	--ms-option-px: 0.5rem;
+	--ms-tag-font-weight: 400;
+	--ms-tag-font-size: 1rem;
 	--ms-line-height: var(--line-height);
+	--ms-tag-line-height: var(--line-height);
+	--ms-tag-color: #{$color-text};
 	--ms-placeholder-color: #{rgba($color-text, 0.3)};
 	--ms-option-color-pointed: inherit;
+	--ms-tag-bg: #{$color-lightergray};
 	--ms-option-bg-pointed: #{$color-lightergray};
 	--ms-option-bg-selected: #{$color-green};
 	--ms-option-bg-selected-pointed: #{$color-green};
