@@ -15,11 +15,10 @@ export default defineEventHandler(async (event) => {
 			id, ingredients, method, structureId, title, url,
 		} = recipe;
 		const data = {
-			ingredients, // TODO typograf
-			method, // TODO typograf
+			ingredients: typografy(ingredients),
+			method: typografy(method),
 			structureId,
-			title: capitalize(title), // TODO:
-			// capitalize && typograph -> prepareTitle()
+			title: typografy(title),
 			url: url || null,
 		};
 

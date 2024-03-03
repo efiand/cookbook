@@ -6,7 +6,7 @@
       </sub-heading>
       <div
         class="recipe__content"
-        v-html="paragraphy(recipe.ingredients)"
+        v-html="recipe.ingredients"
       />
     </template>
 
@@ -16,7 +16,7 @@
       </sub-heading>
       <div
         class="recipe__content"
-        v-html="paragraphy(recipe.method)"
+        v-html="recipe.method"
       />
     </template>
 

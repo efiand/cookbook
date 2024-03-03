@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
 		const {
 			id, title,
 		} = await schemas.entity.validate(await readBody(event));
-		const data = { title: capitalize(title) };
+		const data = { title: typografy(title) };
 
 		if (id) {
 			return await prisma.categories.update({

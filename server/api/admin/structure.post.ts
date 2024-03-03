@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
 		} = await schemas.structure.validate(await readBody(event));
 		const data = {
 			parentId,
-			title: capitalize(title),
+			title: typografy(title),
 		};
 
 		if (id) {
