@@ -16,9 +16,10 @@ model categories {
 }
 
 model images {
-  id       Int    @id @default(autoincrement())
-  filename String @unique @db.VarChar(30)
-  recipeId Int?
+  id        Int    @id @default(autoincrement())
+  filename  String @unique @db.VarChar(30)
+  sortOrder Int?
+  recipeId  Int?
 
   recipe recipes? @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }

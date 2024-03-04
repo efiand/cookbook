@@ -16,6 +16,13 @@
         v-if="src.startsWith('blob:')"
       >Новое</span>
     </button>
+    <button
+      @click="emit('delete')"
+      aria-label="Удалить"
+      class="gallery-item__delete"
+      type="button"
+      v-if="deletable"
+    />
     <ui-modal
       @close="isOpen = false"
       v-if="isOpen"
@@ -33,13 +40,59 @@
 <script lang="ts" setup>
 withDefaults(defineProps<{
 	alt?: string;
+	deletable?: boolean;
 	src: string;
-}>(), { alt: '' });
+}>(), {
+	alt: '',
+	deletable: false,
+});
+const emit = defineEmits(['delete']);
 
 const isOpen = ref(false);
 </script>
 
 <style lang="scss" scoped>
+.gallery-item {
+	position: relative;
+}
+
+.gallery-item__delete {
+	position: absolute;
+	top: 0.25rem;
+	right: 0.25rem;
+	width: 1.5rem;
+	height: 1.5rem;
+	padding: 0;
+	background-color: $color-gray;
+	border-radius: 50%;
+	opacity: 0.9;
+	transition: background-color $transition-default;
+
+	&::before,
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		width: 0.75rem;
+		height: 0.125rem;
+		margin: auto;
+		background-color: $color-white;
+	}
+
+	&::before {
+		transform: rotate(45deg);
+	}
+
+	&::after {
+		transform: rotate(-45deg);
+	}
+
+	&:hover,
+	&:focus {
+		background-color: $color-green;
+	}
+}
+
 .gallery-item__image {
 	display: block;
 	object-fit: cover;

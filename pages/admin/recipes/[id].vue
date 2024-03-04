@@ -74,7 +74,7 @@
       <form-input
         :field="field"
         :id="id"
-        :rows="1"
+        :rows="recipe.url?.split('\n').length || 1"
       />
     </form-item>
     <form-item

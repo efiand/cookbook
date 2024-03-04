@@ -18,6 +18,8 @@
     />
     <gallery-list
       :images="modelValue"
+      @delete="(i) => onDelete(i)"
+      deletable
       no-grid
     />
   </div>
@@ -55,6 +57,12 @@ async function onChange() {
 		files.push(file);
 	});
 
+	emit('update:modelValue', files);
+}
+function onDelete(i: number) {
+	const files: Image[] = [...props.modelValue];
+
+	files.splice(i, 1);
 	emit('update:modelValue', files);
 }
 </script>

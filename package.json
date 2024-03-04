@@ -27,6 +27,7 @@
 		"eslint": "8.56.0",
 		"eslint-plugin-perfectionist": "2.5.0",
 		"http-status-codes": "2.3.0",
+		"imagescript": "1.2.18",
 		"jsonwebtoken": "9.0.2",
 		"nanoid": "5.0.5",
 		"nuxt": "3.9.3",

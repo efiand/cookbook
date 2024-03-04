@@ -1,3 +1,5 @@
+export const { APP_PATH = process.cwd() } = process.env;
+
 export const getStructures = async () => await prisma.structures.findMany({
 	orderBy: [
 		{ sortOrder: 'asc' },
@@ -14,7 +16,10 @@ export const getRecipes = async () => await prisma.recipes.findMany({
 	orderBy: { title: 'asc' },
 	select: {
 		id: true,
-		images: { select: { filename: true } },
+		images: {
+			orderBy: { sortOrder: 'asc' },
+			select: { filename: true },
+		},
 		structureId: true,
 		title: true,
 	},
