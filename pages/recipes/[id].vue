@@ -5,7 +5,7 @@
         Состав
       </sub-heading>
       <div
-        class="recipe__content"
+        class="content"
         v-html="recipe.ingredients"
       />
     </template>
@@ -15,7 +15,7 @@
         Приготовление
       </sub-heading>
       <div
-        class="recipe__content"
+        class="content"
         v-html="recipe.method"
       />
     </template>
@@ -34,7 +34,7 @@
       <sub-heading class="recipe__title">
         Ссылки
       </sub-heading>
-      <ul>
+      <ul class="content">
         <li
           :key="url"
           v-for="url in urls"
@@ -76,10 +76,6 @@ definePageMeta({ validate: validateIdRoute });
 	&:first-child {
 		margin-top: 0.5rem;
 	}
-}
-
-.recipe__content {
-	hyphens: auto;
 }
 
 .recipe__gallery {

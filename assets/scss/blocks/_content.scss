@@ -1,0 +1,81 @@
+/* stylelint-disable no-descending-specificity */
+
+@use '../env' as *;
+
+// Высокая специфичность для приоритета над стилями Quill Editor
+.content.content.content {
+	hyphens: auto;
+
+	a[href] {
+		color: $color-green;
+	}
+
+	ol,
+	ul,
+	p {
+		margin: 0;
+
+		&:not(:last-child) {
+			margin-bottom: 0.5rem;
+		}
+	}
+
+	ol,
+	ul {
+		padding: 0;
+
+		li {
+			position: relative;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+
+			&::before {
+				content: '\2022';
+				position: absolute;
+				top: 0;
+				width: auto;
+				margin: 0;
+				padding: 0;
+			}
+		}
+	}
+
+	ol {
+		counter-reset: list;
+
+		li {
+			padding-left: 1.25rem;
+			counter-increment: list;
+
+			&::before {
+				content: counter(list) '. ';
+				right: calc(100% - 0.875rem);
+			}
+		}
+
+		&:has(li:nth-child(10)) li {
+			padding-left: 1.75rem;
+
+			&::before {
+				content: counter(list) '. ';
+				right: calc(100% - 1.375rem);
+			}
+		}
+	}
+
+	ul {
+		li {
+			position: relative;
+			padding-left: 1rem;
+
+			&::before {
+				content: '\2022';
+				position: absolute;
+				top: 0;
+				right: calc(100% - 0.5rem);
+				width: auto;
+			}
+		}
+	}
+}

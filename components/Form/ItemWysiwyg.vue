@@ -25,6 +25,7 @@
       class="wysiwyg__editor"
     >
       <div
+        class="content"
         ref="editorElement"
       />
     </div>
@@ -143,6 +144,7 @@ onMounted(async () => {
 	:deep(.ql-toolbar) {
 		position: sticky;
 		top: -1rem;
+		z-index: 1;
 		padding: 0.5rem 0;
 		background-color: $color-white;
 		border: none;
