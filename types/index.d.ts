@@ -8,7 +8,6 @@ declare module globalThis {
 	let prisma: PrismaClient | null;
 }
 declare module 'bcrypt-ts';
-declare module 'blob-compare';
 
 declare global {
 	type navType = 'breadcrumbs' | 'categories';
