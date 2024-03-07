@@ -1,5 +1,4 @@
 /* eslint-disable @stylistic/max-len */
-/** @type {import('stylelint').Config} */
 
 export default {
 	extends: [
