@@ -6,7 +6,7 @@ export default (
 ) => {
 	let message = 'Произошла ошибка';
 
-	if (process.env.NODE_ENV === 'development') {
+	if (process.env.NODE_ENV === 'development' || process.env.SHOW_ERRORS) {
 		if ((error as ValidationError).errors) {
 			message = ensureArray((error as ValidationError).errors).join(' ');
 		} else if (error.message) {
