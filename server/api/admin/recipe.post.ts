@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
 		};
 
 		const createActions = [];
-		const images: string[] = [];
+		const addedImages: string[] = [];
 		let newRecipe: Omit<Recipe, 'images'>;
 
 		if (id) {
@@ -69,7 +69,7 @@ export default defineEventHandler(async (event) => {
 				let imagename = '';
 
 				if (filename) {
-					const name = `${Date.now()}.webp`;
+					const name = `${Date.now() + i}.webp`;
 					const image = await Image.decode(data);
 					const {
 						height, width,
@@ -95,6 +95,7 @@ export default defineEventHandler(async (event) => {
 					recipeId: newRecipe.id,
 					sortOrder: i,
 				});
+				addedImages.push(imagename);
 			});
 
 			createActions
@@ -103,8 +104,12 @@ export default defineEventHandler(async (event) => {
 		}
 
 		const deletePromises = recipe.images.map(async (imagename: string) => {
-			if (!images.includes(imagename)) {
-				await unlink(path.resolve(imagesDir, imagename));
+			if (!addedImages.includes(imagename)) {
+				try {
+					await unlink(path.resolve(imagesDir, imagename));
+				} catch (error) {
+					// Do nothing
+				}
 			}
 		});
 
