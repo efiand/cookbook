@@ -8,6 +8,7 @@
 .preloader {
 	position: fixed;
 	inset: 0;
+	z-index: 1;
 	background-color: rgba($color-lightergray, 0.5);
 
 	&::before {

@@ -1,8 +1,12 @@
 <template>
-  <li class="gallery-item">
+  <div class="gallery-item">
     <button
-      @click="isOpen = true"
-      class="gallery-item__preview-control"
+      :class="{
+        'gallery-item__control--sortable': sortable,
+        'gallery-item__control--deletable': deletable
+      }"
+      @click="onPreviewlick"
+      class="gallery-item__control"
       type="button"
     >
       <img
@@ -34,26 +38,66 @@
         class="gallery-item__image"
       >
     </ui-modal>
-  </li>
+  </div>
 </template>
 
 <script lang="ts" setup>
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
 	alt?: string;
 	deletable?: boolean;
+	sortable?: boolean;
 	src: string;
 }>(), {
 	alt: '',
 	deletable: false,
+	sortable: false,
 });
 const emit = defineEmits(['delete']);
 
+// Data
 const isOpen = ref(false);
+
+// Methods
+function onPreviewlick() {
+	if (props.sortable || props.deletable) {
+		return;
+	}
+	isOpen.value = true;
+}
 </script>
 
 <style lang="scss" scoped>
 .gallery-item {
 	position: relative;
+
+	img {
+		display: block;
+		object-fit: cover;
+	}
+}
+
+.gallery-item__control {
+	position: relative;
+	display: block;
+	width: 6rem;
+	height: 6rem;
+	background-color: $color-lightgray;
+	border-radius: 0.25rem;
+
+	&--deletable {
+		cursor: default;
+	}
+
+	&--sortable {
+		cursor: move;
+	}
+}
+
+.gallery-item__preview {
+	width: 6rem;
+	height: 6rem;
+	color: transparent;
+	border-radius: 0.25rem;
 }
 
 .gallery-item__delete {
@@ -93,30 +137,6 @@ const isOpen = ref(false);
 	}
 }
 
-.gallery-item__image {
-	display: block;
-	object-fit: cover;
-	border-radius: 1rem;
-}
-
-.gallery-item__preview-control {
-	position: relative;
-	display: block;
-	width: 6rem;
-	height: 6rem;
-	background-color: $color-lightgray;
-	border-radius: 0.25rem;
-}
-
-.gallery-item__preview {
-	display: block;
-	object-fit: cover;
-	width: 6rem;
-	height: 6rem;
-	color: transparent;
-	border-radius: 0.25rem;
-}
-
 .gallery-item__new {
 	position: absolute;
 	right: 0;
@@ -128,5 +148,9 @@ const isOpen = ref(false);
 	text-transform: uppercase;
 	background-color: rgba($color-green, 0.75);
 	border-radius: 0 0 0.25rem 0.25rem;
+}
+
+.gallery-item__image {
+	border-radius: 1rem;
 }
 </style>

@@ -1,33 +1,56 @@
 <template>
-  <ul
-    :class="{ 'gallery-list--grid': !noGrid }"
+  <vue-draggable
+    :animation="150"
+    :disabled="!sortable || items.length < 2"
     class="gallery-list"
+    v-model="items"
   >
     <gallery-item
       :alt="`Изображение ${i + 1}`"
       :deletable="deletable"
       :key="i"
+      :sortable="sortable && items.length > 1"
       :src="getSrc(image)"
-      @delete="emit('delete', i)"
-      v-for="(image, i) in images"
+      @delete="onDelete(i)"
+      v-for="(image, i) in items"
     />
-  </ul>
+  </vue-draggable>
 </template>
 
 <script lang="ts" setup>
-withDefaults(defineProps<{
+import { VueDraggable } from 'vue-draggable-plus';
+
+const props = withDefaults(defineProps<{
 	deletable?: boolean;
 	images: Image[];
-	noGrid?: boolean;
+	sortable?: boolean;
 }>(), {
 	deletable: false,
-	noGrid: false,
+	sortable: false,
 });
-const emit = defineEmits(['delete']);
+const emit = defineEmits([
+	'delete',
+	'update',
+]);
 
 const OWN_PATTERN = /^\d+\..{3,4}$/u;
 
+// Computed
+const items = computed({
+	get() {
+		return cloneDeep(props.images);
+	},
+	set(files) {
+		emit('update', files);
+	},
+});
+
 // Methods
+function onDelete(i: number) {
+	if (props.deletable) {
+		emit('delete', i);
+	}
+}
 function getSrc(image: Image) {
 	if (typeof image === 'string') {
 		if (OWN_PATTERN.test(image)) {
@@ -43,12 +66,8 @@ function getSrc(image: Image) {
 
 <style lang="scss" scoped>
 .gallery-list {
-	display: contents;
-
-	&--grid {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-	}
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
 }
 </style>

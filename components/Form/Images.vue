@@ -3,37 +3,57 @@
     @paste="onPaste"
     class="form-images"
   >
-    <input
-      :id="id"
-      @change="onChange"
-      accept="image/png, image/jpeg"
-      class="form-images__input visually-hidden"
-      multiple
-      ref="inputElement"
-      type="file"
-    >
-    <label
-      :for="id"
-      aria-label="Перейти к выбору"
-      class="form-images__picker"
-    />
-    <button
-      @click="onPasteClick"
-      aria-label="Вставить из буфера обмена"
-      class="form-images__picker form-images__picker--paste"
-      type="button"
-      v-if="pasteClickSupport"
-    />
+    <div class="form-images__controls">
+      <input
+        :id="id"
+        @change="onChange"
+        accept="image/png, image/jpeg"
+        class="visually-hidden"
+        multiple
+        ref="inputElement"
+        type="file"
+      >
+      <label
+        :for="id"
+        aria-label="Выбрать файл"
+        class="form-images__control form-images__control--pick"
+      />
+      <button
+        @click="onPasteClick"
+        aria-label="Вставить из буфера обмена"
+        class="form-images__control form-images__control--paste"
+        type="button"
+        v-if="pasteClickSupport"
+      />
+      <button
+        :class="{ 'form-images__control--active': sortable }"
+        @click="onSortableClick"
+        aria-label="Режим сортировки"
+        class="form-images__control form-images__control--sort"
+        type="button"
+        v-if="modelValue.length > 1"
+      />
+      <button
+        :class="{ 'form-images__control--active': deletable }"
+        @click="onDeletableClick"
+        aria-label="Режим удаления"
+        class="form-images__control form-images__control--delete"
+        type="button"
+        v-if="modelValue.length"
+      />
+    </div>
     <gallery-list
+      :deletable="deletable"
       :images="modelValue"
-      @delete="(i) => onDelete(i)"
-      deletable
-      no-grid
+      :sortable="sortable"
+      @delete="onDelete($event)"
+      @update="emit('update:modelValue', $event)"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
+
 const props = defineProps<{
 	id?: string;
 	modelValue: Image[];
@@ -49,6 +69,8 @@ const FILE_TYPES = [
 // Data
 const inputElement = ref<HTMLInputElement | null>(null);
 const pasteClickSupport = ref(false);
+const deletable = ref(false);
+const sortable = ref(false);
 
 // Method
 function processFiles(newFiles?: File[]) {
@@ -84,6 +106,14 @@ async function onPasteClick() {
 	}
 	processFiles(files);
 }
+function onSortableClick() {
+	sortable.value = !sortable.value;
+	deletable.value = false;
+}
+function onDeletableClick() {
+	deletable.value = !deletable.value;
+	sortable.value = false;
+}
 function onPaste(event: ClipboardEvent) {
 	processFiles([...event.clipboardData?.files || []]);
 }
@@ -93,7 +123,6 @@ function onDelete(i: number) {
 	files.splice(i, 1);
 	emit('update:modelValue', files);
 }
-
 async function addFileFromClipboard(
 	item: ClipboardItem,
 	files: File[],
@@ -116,15 +145,21 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .form-images {
+	display: grid;
+	gap: 1rem;
+}
+
+.form-images__controls {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.5rem;
 }
 
-.form-images__picker {
+.form-images__control {
 	position: relative;
-	width: 6rem;
-	height: 6rem;
+	flex-shrink: 0;
+	width: 4rem;
+	height: 4rem;
 	padding: 0;
 	color: $color-lightgray;
 	background-color: $color-lightergray;
@@ -132,10 +167,6 @@ onMounted(() => {
 	border-radius: 0.25rem;
 	cursor: pointer;
 	appearance: none;
-
-	&:hover {
-		color: $color-green;
-	}
 
 	&::before {
 		content: '';
@@ -149,12 +180,52 @@ onMounted(() => {
 		@include icon('plus');
 	}
 
+	&::after {
+		content: attr(aria-label);
+		position: absolute;
+		top: 100%;
+		left: 0;
+		z-index: 1;
+		padding: 0.125rem 0.5rem;
+		font-size: 0.75rem;
+		white-space: nowrap;
+		border: 1px solid;
+		border-radius: 0.25rem;
+		visibility: hidden;
+		opacity: 0;
+		transition: $transition-default;
+		transition-property: opacity, visibility;
+	}
+
+	&::after,
+	&--active,
+	&:hover {
+		color: $color-green;
+		background-color: $color-lightergreen;
+	}
+
+	&:hover,
+	&:focus-visible {
+		&::after {
+			visibility: visible;
+			opacity: 1;
+		}
+	}
+
 	&--paste::before {
 		@include icon('paste');
 	}
-}
 
-.form-images__input:focus-visible + .form-images__picker {
-	outline: 2px solid;
+	&--sort::before {
+		@include icon('sort');
+	}
+
+	&--delete::before {
+		@include icon('close');
+	}
+
+	input:focus-visible + &--pick {
+		outline: 2px solid;
+	}
 }
 </style>
