@@ -11,11 +11,11 @@ interface UrlData {
 const { YADISK_TOKEN } = process.env;
 const YADISK_API = 'https://cloud-api.yandex.net/v1/disk/resources/upload';
 const TAIL = 'overwrite=true&fields=href';
-const SQL_PREPEND = `DELETE FROM "recipesCategories";
-DELETE FROM "categories";
-DELETE FROM "recipes";
-UPDATE "structures" SET "parentId" = null;
-DELETE FROM "structures";\n`;
+const SQL_PREPEND = `DELETE FROM \`recipesCategories\`;
+DELETE FROM \`categories\`;
+DELETE FROM \`recipes\`;
+UPDATE \`structures\` SET \`parentId\` = null;
+DELETE FROM \`structures\`;\n`;
 const SQL_TABLES = [
 	'structures',
 	'categories',
@@ -63,9 +63,9 @@ const createDump = ([
 		.map((row: tableRow) => Object.values(row).map(normalizeValue)
 			.join(', '))
 		.join('),\n(');
-	const columns = Object.keys(rows[0]).join('", "');
+	const columns = Object.keys(rows[0]).join('`, `');
 
-	return `INSERT INTO "${tableName}" ("${columns}") VALUES\n(${values});`;
+	return `INSERT INTO \`${tableName}\` (\`${columns}\`) VALUES\n(${values});`;
 };
 
 const upload = async (filename: string, payload: string) => {
@@ -108,8 +108,7 @@ export default defineEventHandler(async () => {
 			upload(`${filename}.json`, JSON.stringify(dataJson)),
 			upload(
 				`${filename}.sql`,
-				`${SQL_PREPEND}\n${dumpedEntities.join('\n\n')}`
-					.replaceAll('"', '`'),
+				`${SQL_PREPEND}\n${dumpedEntities.join('\n\n')}`,
 			),
 		]);
 	} catch (error) {
