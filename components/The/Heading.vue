@@ -34,7 +34,6 @@ const route = useRoute();
 	color: $color-green;
 	letter-spacing: -1px;
 	overflow-wrap: anywhere;
-	hyphens: auto;
 
 	@include media-md-lg {
 		padding: 2rem 3rem;

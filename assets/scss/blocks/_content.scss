@@ -4,8 +4,6 @@
 
 // Высокая специфичность для приоритета над стилями Quill Editor
 .content.content.content {
-	hyphens: auto;
-
 	a[href] {
 		color: $color-green;
 	}
