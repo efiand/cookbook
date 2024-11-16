@@ -131,8 +131,7 @@ function onClick() {
 	text-decoration: none;
 
 	&--current {
-		cursor: default;
-		opacity: 0.6;
+		pointer-events: none;
 	}
 }
 
