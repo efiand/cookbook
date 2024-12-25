@@ -86,14 +86,14 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.showfall {
+.snowfall {
 	overflow: hidden;
 	font-size: 3vw;
 	color: $color-white;
 	user-select: none;
 }
 
-.snowfall__flake {
+.snowfall__snowflake {
 	position: absolute;
 }
 </style>
