@@ -31,6 +31,7 @@ model recipes {
   method      String  @db.Text
   url         String? @db.VarChar(2000)
   structureId Int
+  aromachefId Int?    @unique
 
   structure  structures?         @relation(fields: [structureId], references: [id])
   categories recipesCategories[]

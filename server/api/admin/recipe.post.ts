@@ -20,9 +20,10 @@ export default defineEventHandler(async (event) => {
 		} = await schemas.recipe
 			.validate(JSON.parse(rawRecipe.data.toString()));
 		const {
-			id, ingredients, method, structureId, title, url,
+			aromachefId, id, ingredients, method, structureId, title, url,
 		} = recipe;
 		const data = {
+			aromachefId: aromachefId || null,
 			ingredients: typografy(ingredients),
 			method: typografy(method),
 			structureId,

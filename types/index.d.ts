@@ -26,6 +26,7 @@ declare global {
 	}
 
 	interface RecipeContent {
+		aromachefId?: null | number;
 		ingredients?: string;
 		method?: string;
 		url?: null | string;

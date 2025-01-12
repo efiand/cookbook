@@ -17,13 +17,18 @@ const parentId = object({
 		.integer('ID родительской записи должен быть целочисленным'),
 });
 const recipeContent = object({
+	aromachefId: number()
+		.transform((value, orig) => orig === '' ? undefined : value)
+		.nullable()
+		.positive('ID рецепта должен быть положительным')
+		.integer('ID рецепта должен быть целочисленным'),
 	ingredients: string()
 		.required('Состав обязателен для заполнения'),
 	method: string()
 		.required('Приготовление обязательно для заполнения'),
 	structureId: number()
 		.required('Раздел должен быть указан')
-		.integer('ID раздела должно быть целочисленным'),
+		.integer('ID раздела должен быть целочисленным'),
 	url: string().default(''),
 }).concat(title);
 const entity = id.concat(title);

@@ -58,7 +58,17 @@ const togglePreloader = inject('togglePreloader') as flaggedMethod;
 // Data
 const recipeId = +route.params.id;
 let recipe = appStore.recipes.find(({ id }) => id === recipeId) as Recipe || {};
-const urls = listify(recipe.url || '');
+
+// Computed
+const urls = computed(() => {
+	const items = listify(recipe.url || '');
+
+	if (recipe.aromachefId) {
+		items.push(`https://aromachef.ru/recipe/${recipe.aromachefId}`);
+	}
+
+	return items;
+});
 
 if (!recipe.ingredients && !recipe.method) {
 	togglePreloader(true);

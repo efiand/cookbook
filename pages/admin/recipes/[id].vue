@@ -48,6 +48,19 @@
         multi
       />
     </form-item>
+    <form-item
+      alias="recipe"
+      label="Номер в aromachef"
+      name="aromachefId"
+      v-model="recipe.aromachefId"
+      v-slot="{ id, field, invalid }"
+    >
+      <form-input
+        :field="field"
+        :id="id"
+        :invalid="invalid"
+      />
+    </form-item>
     <form-item-wysiwyg
       :error="errors.ingredients"
       alias="recipe"
@@ -165,6 +178,7 @@ async function getRecipe() {
 	}
 
 	return {
+		aromachefId: current?.aromachefId || null,
 		id: current?.id || 0,
 		images: current?.images || [],
 		ingredients: current?.ingredients || '',
