@@ -3,7 +3,6 @@ export default defineEventHandler(async (event): Promise<RecipeContent> => {
 	const recipeContent = await prisma.recipes
 		.findUnique({
 			select: {
-				aromachefId: true,
 				id: true,
 				ingredients: true,
 				method: true,

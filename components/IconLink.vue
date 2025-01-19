@@ -2,18 +2,21 @@
   <nuxt-link
     :aria-label="ariaLabels[mode]"
     :class="`icon-link icon-link--${mode}`"
+    :target="target"
     :to="href"
   />
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{
+const props = withDefaults(defineProps<{
 	href: IconLink['href'];
 	mode: IconLink['mode'];
-}>();
+	target?: HTMLAnchorElement['target'];
+}>(), { target: undefined });
 
 // Data
-const ariaLabels = {
+const ariaLabels: Record<IconLink['mode'], string> = {
+	aromachef: 'Перейти к аналогичной странице на aromachef.ru',
 	auth: 'Авторизоваться',
 	back: 'Назад к просмотру',
 	edit: 'Редактировать',

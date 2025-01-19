@@ -4,7 +4,7 @@
       :class="{ 'links-list__item--editable': editable }"
       :key="href"
       class="links-list__item"
-      v-for="{additionals, children, href, title}, i in items"
+      v-for="{ additionals, children, href, title, aromachefHref }, i in items"
     >
       <spoiler-toggler
         class="links-list__toggler"
@@ -19,8 +19,15 @@
           {{ title }}
         </nuxt-link>
         <icon-link
+          :href="aromachefHref"
+          class="links-list__icon-link"
+          mode="aromachef"
+          target="_blank"
+          v-if="aromachefHref"
+        />
+        <icon-link
           :href="`/admin${href}`"
-          class="links-list__edit-link"
+          class="links-list__icon-link links-list__icon-link--edit"
           mode="edit"
           v-if="editable"
         />
@@ -87,11 +94,14 @@ const closeds = ref(props.items.map(() => true));
 	@include underline-link;
 }
 
-.links-list__edit-link {
+.links-list__icon-link {
 	flex-shrink: 0;
 	margin-top: -3px;
 	margin-left: 6px;
-	visibility: hidden;
+
+	&--edit {
+		visibility: hidden;
+	}
 }
 
 .links-list__group {
@@ -102,7 +112,7 @@ const closeds = ref(props.items.map(() => true));
 
 	&:hover,
 	&:focus-within {
-		.links-list__edit-link {
+		.links-list__icon-link--edit {
 			@include media-lg {
 				visibility: visible;
 			}

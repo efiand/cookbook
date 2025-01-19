@@ -15,6 +15,7 @@ export const getStructures = async () => await prisma.structures.findMany({
 export const getRecipes = async () => await prisma.recipes.findMany({
 	orderBy: { title: 'asc' },
 	select: {
+		aromachefId: true,
 		id: true,
 		images: {
 			orderBy: { sortOrder: 'asc' },

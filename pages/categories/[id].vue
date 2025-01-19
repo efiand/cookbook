@@ -24,8 +24,9 @@ const recipesInCategory = computed((): ExtendedLink[] => recipes
 			categoryId, recipeId,
 		}) => recipeId === id && categoryId === +route.params.id))
 	.map(({
-		id, title,
+		aromachefId, id, title,
 	}) => ({
+		aromachefHref: getAromachefHref(aromachefId),
 		href: `/recipes/${id}`,
 		title,
 	})));

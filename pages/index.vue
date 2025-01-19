@@ -23,8 +23,9 @@ const items = computed((): ExtendedLink[] => structures
 		additionals: recipes
 			.filter(({ structureId }) => structureId === id)
 			.map(({
-				id, title,
+				aromachefId, id, title,
 			}) => ({
+				aromachefHref: getAromachefHref(aromachefId),
 				href: `/recipes/${id}`,
 				title,
 			})),
@@ -36,8 +37,9 @@ const items = computed((): ExtendedLink[] => structures
 				children: recipes
 					.filter(({ structureId }) => structureId === id)
 					.map(({
-						id, title,
+						aromachefId, id, title,
 					}) => ({
+						aromachefHref: getAromachefHref(aromachefId),
 						href: `/recipes/${id}`,
 						title,
 					})),

@@ -68,11 +68,12 @@ declare global {
 
 	interface IconLink {
 		href: string;
-		mode: 'auth' | 'back' | 'edit';
+		mode: 'aromachef' | 'auth' | 'back' | 'edit';
 	}
 
 	interface ExtendedLink extends Link {
 		additionals?: ExtendedLink[];
+		aromachefHref?: string;
 		children?: ExtendedLink[];
 	}
 

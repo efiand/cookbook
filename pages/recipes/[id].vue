@@ -64,7 +64,7 @@ const urls = computed(() => {
 	const items = listify(recipe.url || '');
 
 	if (recipe.aromachefId) {
-		items.push(`https://aromachef.ru/recipe/${recipe.aromachefId}`);
+		items.push(getAromachefHref(recipe.aromachefId));
 	}
 
 	return items;

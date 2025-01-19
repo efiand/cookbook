@@ -31,8 +31,9 @@ const substructures = computed((): ExtendedLink[] => structures
 		children: recipes
 			.filter(({ structureId }) => structureId === id)
 			.map(({
-				id, title,
+				aromachefId, id, title,
 			}) => ({
+				aromachefHref: getAromachefHref(aromachefId),
 				href: `/recipes/${id}`,
 				title,
 			})),
@@ -42,8 +43,9 @@ const substructures = computed((): ExtendedLink[] => structures
 const recipesInStructure = computed((): ExtendedLink[] => recipes
 	.filter(({ structureId }) => structureId === +route.params.id)
 	.map(({
-		id, title,
+		aromachefId, id, title,
 	}) => ({
+		aromachefHref: getAromachefHref(aromachefId),
 		href: `/recipes/${id}`,
 		title,
 	})));
