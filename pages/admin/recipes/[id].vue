@@ -223,6 +223,16 @@ function getCategoriesOptions() {
 	return options;
 }
 
+onMounted(async () => {
+	await wait(100);
+
+	const inputElement = document
+		.querySelector('.admin-recipe input') as HTMLInputElement;
+
+	inputElement.focus();
+	document.body.scrollIntoView();
+});
+
 definePageMeta({ validate: validateIdRoute });
 </script>
 

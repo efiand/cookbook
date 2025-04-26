@@ -7,6 +7,12 @@
 	z-index: 1;
 	display: grid;
 	gap: 0.5rem;
+	max-width: calc(100vw - 2rem);
+	overflow-wrap: anywhere;
+
+	@include media-md-lg {
+		max-width: 500px;
+	}
 }
 
 .toaster__toast {

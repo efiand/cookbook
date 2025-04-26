@@ -36,11 +36,11 @@ export default defineEventHandler(async (event) => {
 		let newRecipe: Omit<Recipe, 'images'>;
 
 		if (id) {
-			[newRecipe] = await Promise.all([
-				prisma.recipes.update({
-					data,
-					where: { id },
-				}),
+			newRecipe = await prisma.recipes.update({
+				data,
+				where: { id },
+			});
+			await Promise.all([
 				prisma.images.deleteMany({ where: { recipeId: id } }),
 				prisma.recipesCategories
 					.deleteMany({ where: { recipeId: id } }),
