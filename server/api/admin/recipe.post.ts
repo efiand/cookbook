@@ -76,13 +76,22 @@ export default defineEventHandler(async (event) => {
 						height, width,
 					} = image;
 					const ratio = width / height;
+					let targetWidth = width;
+					let targetHeight = height;
 
 					if (width > 800) {
-						image.resize(800, 800 / ratio);
+						targetWidth = 800;
+						targetHeight = 800 / ratio;
 					}
-					if (height > 600) {
-						image.resize(600 * ratio, 600);
+					if (targetHeight > 600) {
+						targetHeight = 600;
+						targetWidth = 600 * ratio;
 					}
+
+					if (targetWidth !== width) {
+						image.resize(targetWidth, targetHeight);
+					}
+
 					const output = await image.encodeWEBP(80);
 
 					await writeFile(path.resolve(imagesDir, name), output);
