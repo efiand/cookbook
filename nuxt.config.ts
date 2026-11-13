@@ -22,6 +22,7 @@ export default defineNuxtConfig({
 			},
 		],
 	],
+	nitro: { compatibilityDate: '2026-11-14' },
 	postcss: {
 		plugins: {
 			'autoprefixer': {},

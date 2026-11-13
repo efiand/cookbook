@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "codegraph": {
+      "args": [
+        "serve",
+        "--mcp"
+      ],
+      "command": "codegraph"
+    },
+    "serena": {
+      "args": [
+        "${workspaceFolder}${/}tools${/}serena-mcp.js",
+        "start-mcp-server",
+        "--context",
+        "ide",
+        "--project",
+        "${workspaceFolder}",
+        "--open-web-dashboard",
+        "false"
+      ],
+      "command": "node"
+    }
+  }
+}

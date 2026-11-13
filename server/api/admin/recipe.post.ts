@@ -1,10 +1,19 @@
 import type { MultiPartData } from 'h3';
 
-import { Image } from 'imagescript';
 import {
 	unlink, writeFile,
 } from 'node:fs/promises';
 import path from 'node:path';
+import sharp from 'sharp';
+
+const WEBP_OPTIONS = {
+	chromaSubsampling: '4:2:0',
+	effort: 4,
+	quality: 75,
+} as const;
+
+sharp.cache(false);
+sharp.concurrency(1);
 
 const imagesDir = path.resolve(APP_PATH, 'public/images/recipes');
 
@@ -71,10 +80,9 @@ export default defineEventHandler(async (event) => {
 
 				if (filename) {
 					const name = `${Date.now() + i}.webp`;
-					const image = await Image.decode(data);
 					const {
-						height, width,
-					} = image;
+						height = 0, width = 0,
+					} = await sharp(data).metadata();
 					const ratio = width / height;
 					let targetWidth = width;
 					let targetHeight = height;
@@ -88,11 +96,16 @@ export default defineEventHandler(async (event) => {
 						targetWidth = 600 * ratio;
 					}
 
-					if (targetWidth !== width) {
-						image.resize(targetWidth, targetHeight);
+					let pipeline = sharp(data);
+
+					if (targetWidth !== width || targetHeight !== height) {
+						pipeline = pipeline.resize(
+							Math.round(targetWidth),
+							Math.round(targetHeight),
+						);
 					}
 
-					const output = await image.encodeWEBP(80);
+					const output = await pipeline.webp(WEBP_OPTIONS).toBuffer();
 
 					await writeFile(path.resolve(imagesDir, name), output);
 					imagename = name;
