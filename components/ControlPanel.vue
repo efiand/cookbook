@@ -26,12 +26,19 @@
 
 <script lang="ts" setup>
 const togglePreloader = inject('togglePreloader') as flaggedMethod;
+const {
+	ensureSession, sessionMessage,
+} = useAdminSessionGuard();
 
 // Data
 const dumping = ref(false);
 
 // Methods
 async function dump() {
+	if (!await ensureSession()) {
+		return;
+	}
+
 	dumping.value = true;
 	togglePreloader(true);
 
@@ -41,7 +48,7 @@ async function dump() {
 	togglePreloader(false);
 
 	if (res.error.value) {
-		toast(res.error.value.data.message, { error: true });
+		toast(res.error.value.data?.message ?? sessionMessage, { error: true });
 	} else {
 		toast('Резервное копирование завершено!');
 	}

@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 const {
 	AUTH_HASH, AUTH_LOGIN, SECRET_INGREDIENT,
 } = process.env;
-const maxAge = 86400;
+const maxAge = 7 * 86_400;
 const hash = AUTH_HASH?.replaceAll('_', '$') || '';
 
 export default defineEventHandler(async (event) => {
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
 		const authToken = jwt.sign(
 			{ authedUser: AUTH_LOGIN },
 			SECRET_INGREDIENT as string,
-			{ expiresIn: '24h' },
+			{ expiresIn: '7d' },
 		);
 
 		setCookie(event, 'authToken', authToken, {

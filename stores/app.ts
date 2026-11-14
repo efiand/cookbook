@@ -145,14 +145,20 @@ export const useAppStore = defineStore('appStore', () => {
 		const fetchData = () => {
 			return $fetch('/api', { headers: useRequestHeaders(['cookie']) });
 		};
-		const data = (await useAsyncData('app', fetchData))
-			.data.value as AppData;
+		const { data } = await useAsyncData('app', fetchData);
+		const appData = data.value as AppData | null;
 
-		authorized.value = data.authorized;
-		rawCategories.value = data.categories;
-		recipes.value = data.recipes;
-		recipesCategories.value = data.recipesCategories;
-		structures.value = data.structures;
+		if (!appData) {
+			authorized.value = false;
+
+			return;
+		}
+
+		authorized.value = appData.authorized;
+		rawCategories.value = appData.categories;
+		recipes.value = appData.recipes;
+		recipesCategories.value = appData.recipesCategories;
+		structures.value = appData.structures;
 	}
 	async function fillRecipe(recipeId: number) {
 		const url = `/api/recipes/${recipeId}`;
@@ -243,11 +249,21 @@ export const useAppStore = defineStore('appStore', () => {
 
 		if (error.value || !updateMethods[name || 'index']) {
 			const { statusCode = 404 } = error.value as AppError || {};
+			const code = Number.isFinite(statusCode) ? statusCode : 404;
 
-			return setDefaultPageData(`Ошибка ${statusCode}`);
+			return setDefaultPageData(`Ошибка ${code}`);
 		}
 
-		updateMethods[`${name || 'index'}${isAdmin ? 'Admin' : ''}`](+id);
+		const pageId = Number(id);
+		const methodKey = `${name || 'index'}${isAdmin ? 'Admin' : ''}`;
+		const idFromPath = name && name !== 'index'
+			&& methodKey !== 'categoriesAdmin';
+
+		if (idFromPath && !Number.isFinite(pageId)) {
+			throw createNotFoundError('Страница не найдена');
+		}
+
+		updateMethods[methodKey](pageId);
 	}
 	function updateRecipes(
 		newRecipes: Recipe[], newRecipesCategories: RecipeCategory[],

@@ -11,6 +11,7 @@ export default Object.freeze({
 	},
 	IMAGE: 'background.webp',
 	PROJECT: 'Кулинарная книга',
+	SESSION_EXPIRED_MESSAGE: 'Сессия истекла. Войдите снова.',
 	StatusCodes,
 	head: {
 		htmlAttrs: { lang: 'ru' },

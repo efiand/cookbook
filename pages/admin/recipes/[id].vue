@@ -125,9 +125,16 @@ const recipeCategories = ref<number[]>(appStore.recipesCategories
 	.filter((item) => item.recipeId === recipeId)
 	.map(({ categoryId }) => categoryId));
 const posting = ref(false);
+const {
+	ensureSession, sessionMessage,
+} = useAdminSessionGuard();
 
 // Methods
 async function submit() {
+	if (!await ensureSession()) {
+		return;
+	}
+
 	posting.value = true;
 	togglePreloader(true);
 
@@ -153,20 +160,40 @@ async function submit() {
 	togglePreloader(false);
 
 	if (res.error.value) {
-		toast(res.error.value.data.message, { error: true });
-	} else {
-		const {
-			id, recipes, recipesCategories,
-		} = res.data.value as {
-			id: number;
-			recipes: Recipe[];
-			recipesCategories: RecipeCategory[];
-		};
+		const message = res.error.value.data?.message ?? sessionMessage;
 
-		appStore.updateRecipes(recipes, recipesCategories);
-		navigateTo(`/recipes/${id}`, { external: true });
-		toast(`Рецепт успешно ${recipeId ? 'обновлён' : 'добавлен'}!`);
+		toast(message, { error: true });
+
+		if (res.error.value.statusCode === constants.StatusCodes.UNAUTHORIZED) {
+			await navigateTo('/auth');
+		}
+
+		return;
 	}
+
+	const payload = res.data.value as {
+		id: number;
+		recipes: Recipe[];
+		recipesCategories: RecipeCategory[];
+	} | null;
+
+	if (!payload?.recipes) {
+		toast('Произошла ошибка', { error: true });
+
+		return;
+	}
+
+	const savedId = payload.id ?? recipeId;
+
+	if (!Number.isFinite(savedId)) {
+		toast('Произошла ошибка', { error: true });
+
+		return;
+	}
+
+	appStore.updateRecipes(payload.recipes, payload.recipesCategories);
+	toast(`Рецепт успешно ${recipeId ? 'обновлён' : 'добавлен'}!`);
+	await navigateTo(`/recipes/${savedId}`, { external: true });
 }
 async function getRecipe() {
 	let current = appStore.recipes.find(({ id }) => id === recipeId);

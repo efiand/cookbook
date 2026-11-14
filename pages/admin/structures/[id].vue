@@ -62,9 +62,16 @@ const options = ref(appStore.structures
 		value: id,
 	})));
 const posting = ref(false);
+const {
+	ensureSession, sessionMessage,
+} = useAdminSessionGuard();
 
 // Methods
 async function submit() {
+	if (!await ensureSession()) {
+		return;
+	}
+
 	posting.value = true;
 	togglePreloader(true);
 
@@ -81,19 +88,37 @@ async function submit() {
 	togglePreloader(false);
 
 	if (res.error.value) {
-		toast(res.error.value.data.message, { error: true });
-	} else {
-		const {
-			id, structures,
-		} = res.data.value as {
-			id: number;
-			structures: Structure[];
-		};
+		toast(res.error.value.data?.message ?? sessionMessage, { error: true });
 
-		appStore.updateStructures(structures);
-		navigateTo(`/structures/${id}`, { external: true });
-		toast(`Раздел успешно ${structureId ? 'обновлён' : 'добавлен'}!`);
+		if (res.error.value.statusCode === constants.StatusCodes.UNAUTHORIZED) {
+			await navigateTo('/auth');
+		}
+
+		return;
 	}
+
+	const payload = res.data.value as {
+		id: number;
+		structures: Structure[];
+	} | null;
+
+	if (!payload?.structures) {
+		toast('Произошла ошибка', { error: true });
+
+		return;
+	}
+
+	const savedId = payload.id ?? structureId;
+
+	if (!Number.isFinite(savedId)) {
+		toast('Произошла ошибка', { error: true });
+
+		return;
+	}
+
+	appStore.updateStructures(payload.structures);
+	toast(`Раздел успешно ${structureId ? 'обновлён' : 'добавлен'}!`);
+	await navigateTo(`/structures/${savedId}`, { external: true });
 }
 function getStructure() {
 	const current = appStore.structures.find(({ id }) => id === structureId);

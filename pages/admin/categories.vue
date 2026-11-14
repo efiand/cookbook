@@ -41,6 +41,9 @@ interface Model extends Entity {
 
 const appStore = useAppStore();
 const schema = toTypedSchema(schemas.title);
+const {
+	ensureSession, sessionMessage,
+} = useAdminSessionGuard();
 
 // Data
 const models = ref<Model[]>([
@@ -56,6 +59,10 @@ const models = ref<Model[]>([
 
 // Methods
 async function submit(model: Model) {
+	if (!await ensureSession()) {
+		return;
+	}
+
 	model.posting = true;
 
 	const {
@@ -70,7 +77,7 @@ async function submit(model: Model) {
 	});
 
 	if (res.error.value) {
-		toast(res.error.value.data.message, { error: true });
+		toast(res.error.value.data?.message ?? sessionMessage, { error: true });
 	} else {
 		const newData = res.data.value as Entity;
 
